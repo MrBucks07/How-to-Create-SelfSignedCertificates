@@ -9,21 +9,17 @@ link : https://www.openssl.org/
 Command : openssl version or openssl version -a   --> Shows version of openssl and other information. 
 
 Step 2
-Create key pair
-Command : openssl genrsa -out (keypairfilename.key) 2048
+Create private key
+Command : openssl genrsa -out (key.pem) 2048
 
 Step 3
-Extract public key from key pair
-Command : openssl rsa -in (keypairfilename.key) -pubout -out (publickeyfilename.key)
+Create certificate signing request for key pair.
+Command : openssl req -new -key (key.pem) -out (csr.pem)
 
 Step 4
-Create certificate signing request for key pair.
-Command : openssl req -new -key (keypairfilename.key) -out (csrfilename.csr)
+Checking that inforamation given during csr request is correct.
+Command : openssl req -text -in (csr.pem) -noout -verify
 
 Step 5
-Checking that inforamation given during csr request is correct.
-Command : openssl req -text -in (csrfilename.csr) -noout -verify
-
-Step 6
 Signing Certificate (Self)
-Command : openssl x509 -in (csrfilename.csr) -out (crtfilename.crt) -req -signkey (keypairfilename.key) -days 365
+Command : openssl x509 -req -in (csr.pem) -signkey (key.pem) -out (cert.pem) -days (365)
